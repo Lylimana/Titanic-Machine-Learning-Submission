@@ -1,4 +1,4 @@
-'''This is my first ever README. 
+This is my first ever README. 
 
 Welcome to my submission for the titanic competition on kaggle. 
 
@@ -8,4 +8,4 @@ This is also my first endeavour in documenting and presenting this information i
 
 I hope you enjoy! 
 
-- Miguel Manalili'''
+- Miguel Manalili
