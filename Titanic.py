@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import BeautifyGraph as bfyg
 
 train = pd.read_csv(r"C:\Users\manal\Desktop\Titanic ML Submission\titanic\train.csv")
 test = pd.read_csv(r"C:\Users\manal\Desktop\Titanic ML Submission\titanic\test.csv")
@@ -22,4 +23,18 @@ print("Percentage of men who survived: {:.2f}%".format(rate_men*100))
 
 train_duplicates = train_df.duplicated() 
 
-train_duplicates.sum()
+print(train_duplicates.sum())
+
+train_df.shape
+
+train_df.columns
+
+age_sorted = train_df.sort_values("Age")
+
+
+
+
+
+
+
+# for i, age in enumerate(train_df['Ages']):
