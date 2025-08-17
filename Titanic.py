@@ -12,3 +12,12 @@ test_df = pd.DataFrame(test)
 train_df.head(10)
 
 test_df.head(10)
+
+women = train_df.loc[train_df.Sex == 'female']["Survived"]
+rate_women = sum(women)/len(women)
+
+men = train_df.loc[train_df.Sex == 'male']["Survived"]
+rate_men = sum(men)/len(men)
+
+print("Percentage of women who survived: {:.2f}%".format(rate_women*100))
+print("Percentage of men who survived: {:.2f}%".format(rate_men*100))
