@@ -29,12 +29,20 @@ train_df.shape
 
 train_df.columns
 
-age_sorted = train_df.sort_values("Age")
+# age_sorted = train_df.sort_values('Age')
+
+ages_survived = train_df.loc[train_df.Survived == 1]["Age"]
+
+ages_range = [i for i in range(100)]
+
+ages_survived_array = [age for age in ages_survived]
+    
+print(ages_range)
+print(ages_survived_array)
+    
+plt.scatter(ages_range, ages_survived_array)
+plt.show()
 
 
 
 
-
-
-
-# for i, age in enumerate(train_df['Ages']):
