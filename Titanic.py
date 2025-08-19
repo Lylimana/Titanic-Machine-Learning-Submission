@@ -24,6 +24,8 @@ train_df.columns
 survived = train_df.loc[train_df.Survived == 1]
 not_survived = train_df.loc[train_df.Survived == 0]
 
+
+
 # Age & Fare Comparisson Between those who Died (R) and Survived (B)
 plt.scatter(survived['Age'], survived['Fare'], c='blue', alpha=0.50)
 plt.scatter(not_survived['Age'], not_survived['Fare'], c='red', alpha=0.50)
@@ -40,6 +42,9 @@ rate_men = sum(men)/len(men)
 
 survived_class = survived['Pclass']
 not_survived_class = not_survived['Pclass']
+
+
+
 # Class Comparisson Between those who Survived
 Passenger_classes = np.arange(1,4)
 
@@ -61,6 +66,8 @@ plt.title('Class Comparisson Between those who Survived in different classes')
 plt.xlabel('Class')
 plt.ylabel('Total')
 plt.show()
+
+
 
 # Class Comparisson Between those who Died 
 Passenger_classes_array_not_survived = []
@@ -85,6 +92,7 @@ plt.show()
 fig, ax = plt.subplots()
 
 
+
 # Class Comparisson Between those who Died and survived visualised
 ax.bar(Passenger_classes,Passenger_classes_array_not_survived, width=1, edgecolor="white", linewidth=0.7, color = 'red', alpha = 0.5)
 ax.bar(Passenger_classes,Passenger_classes_array_survived, width=1, edgecolor="white", linewidth=0.7, color = 'blue', alpha = 0.5)
@@ -98,13 +106,18 @@ plt.ylabel('Total')
 plt.show()
 
 
+
 # Survival Rate of men and women
 print("Percentage of men who survived: {:.2f}%".format(rate_men*100))
 print("Percentage of women who survived: {:.2f}%".format(rate_women*100))
 
+
+
 # Data Cleaning
 train_df_cleaned = train_df.drop(['PassengerId', 'Survived', 'Name', 'SibSp', 'Ticket', 'Cabin',  'Embarked'], axis='columns')
 test_df_cleaned = test_df.drop(['PassengerId', 'Name', 'SibSp', 'Ticket', 'Cabin',  'Embarked'], axis='columns')
+
+
 
 # Turning categorical data to numerical Data
 train_df_cleaned['Sex'].replace(['female', 'male'],[1, 0], inplace=True) # Could have just done Label Encoding... 
@@ -122,6 +135,7 @@ train_df_cleaned['Sex'].replace(['female', 'male'],[1, 0], inplace=True) # Could
 # test_df_cleaned = test_df_cleaned['Fare'].round(2)
 
 
+
 # Train Test Split
 from sklearn.model_selection import train_test_split
 
@@ -132,6 +146,8 @@ y = train_df['Survived']
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state = 11, test_size = 0.3)
 
 X_train.describe().round(2)
+
+
 
 # Random Forest 
 from sklearn.ensemble import RandomForestClassifier
@@ -144,15 +160,19 @@ from sklearn.ensemble import RandomForestClassifier
 
     # rf.score(X_test, y_test)
 
+
+
 # finding out more metrics on model i.e. accuracy
 from sklearn.metrics import classification_report
 print(classification_report(y_test, y_pred))
+
 
 
 # finding out which features had the most influence on the prediction 
 features = pd.DataFrame(rf.feature_importances_, index = X.columns)
 
 features.head()
+
 
 
 # Random Forest 2 - Tuning Hyper Parameters
@@ -169,6 +189,8 @@ features.head()
     # y_pred = rf2.predict(X_test)
 
     # rf2.score(X_test, y_test)
+
+
 
 # Random Forest 3- Finding optimum hyperparameters using GridSearchCV
 from sklearn.model_selection import GridSearchCV
@@ -207,4 +229,19 @@ rf3.fit(X_train, y_train)
 
 y_pred = rf3.predict(X_test)
 
-rf3.score(X_test, y_test)
+rf3.score(X_test, y_test)#
+
+
+# Turning categorical data to numerical data for test dataset
+test_df_cleaned['Sex'].replace(['female', 'male'],[1, 0], inplace=True) # Could have just done Label Encoding... 
+
+
+# Final Predictions
+predictions = rf3.predict(test_df_cleaned)
+
+print(predictions)
+
+# Place data into Excell File
+Final_predictions = test_df_cleaned.drop(['Pclass', 'Sex', 'Age', 'Parch', 'Fare'], axis='columns')
+
+Final_predictions['PassengerId'] = test_df['PassengerId']
