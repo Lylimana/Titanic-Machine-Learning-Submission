@@ -82,11 +82,10 @@ plt.xlabel('Class')
 plt.ylabel('Total')
 plt.show()
 
-
-
 fig, ax = plt.subplots()
 
 
+# Class Comparisson Between those who Died and survived visualised
 ax.bar(Passenger_classes,Passenger_classes_array_not_survived, width=1, edgecolor="white", linewidth=0.7, color = 'red', alpha = 0.5)
 ax.bar(Passenger_classes,Passenger_classes_array_survived, width=1, edgecolor="white", linewidth=0.7, color = 'blue', alpha = 0.5)
 
@@ -104,8 +103,10 @@ print("Percentage of men who survived: {:.2f}%".format(rate_men*100))
 print("Percentage of women who survived: {:.2f}%".format(rate_women*100))
 
 # Data Cleaning
+train_df_cleaned = train_df.drop(['PassengerId', 'Survived', 'Name', 'SibSp', 'Ticket', 'Cabin',  'Embarked'], axis='columns')
+test_df_cleaned = test_df.drop(['PassengerId', 'Name', 'SibSp', 'Ticket', 'Cabin',  'Embarked'], axis='columns')
 
-train_df_cleaned = train_df.drop(['Name', 'SibSp', 'Ticket', 'Cabin',  'Embarked'], axis='columns')
+train_df_cleaned['Sex'].replace(['female', 'male'],[1, 0], inplace=True)
 
     # Embarked and Cabin can potentially lead us to more accurate prediction but dropping for now to reduce complexity and dimensionality.
 
@@ -116,8 +117,53 @@ train_df_cleaned = train_df.drop(['Name', 'SibSp', 'Ticket', 'Cabin',  'Embarked
     # Cabin feature could indicate where the passenger was staying during the disaster. If the passengers room was closer to deck and or escape routes,
     # they have a higher likelihood of surviving. 
 
-train_df_cleaned.columns
+# train_df_cleaned = train_df_cleaned['Fare'].round(2)
+# test_df_cleaned = test_df_cleaned['Fare'].round(2)
 
-train_df_cleaned.head(30)
 
-rounded_fare = train_df_cleaned['Fare'].round(2)
+# Train Test Split
+from sklearn.model_selection import train_test_split
+
+X = train_df_cleaned
+
+y = train_df['Survived']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state = 11, test_size = 0.3)
+
+X_train.describe().round(2)
+
+# Random Forest 
+from sklearn.ensemble import RandomForestClassifier
+
+rf = RandomForestClassifier()
+
+rf.fit(X_train, y_train)
+
+y_pred = rf.predict(X_test)
+
+rf.score(X_test, y_test)
+
+# finding out more metrics on model i.e. accuracy
+from sklearn.metrics import classification_report
+print(classification_report(y_test, y_pred))
+
+
+# finding out which features had the most influence on the prediction 
+features = pd.DataFrame(rf.feature_importances_, index = X.columns)
+
+features.head()
+
+
+# Random Forest 2 - Tuning Hyper Parameters
+rf2 = RandomForestClassifier(
+    n_estimators = 100, # Number of Trees in the forest
+    max_features = None, # Sets limit on number of features used - in this case, there is no limit
+    max_depth = 50, # Sets the depth of tree
+    max_leaf_nodes = 50 # Sets the number of leaf nodes to branch out 
+)
+
+rf2.fit(X_train, y_train)
+
+y_pred = rf2.predict(X_test)
+
+rf2.score(X_test, y_test)
