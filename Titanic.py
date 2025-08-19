@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import BeautifyGraph as bfyg
+import BeautifyGraph as btyg
 
 train = pd.read_csv(r"C:\Users\manal\Desktop\Titanic ML Submission\titanic\train.csv")
 test = pd.read_csv(r"C:\Users\manal\Desktop\Titanic ML Submission\titanic\test.csv")
@@ -21,14 +21,13 @@ train_df.shape
 
 train_df.columns
 
-# ages_survived = train_df.loc[train_df.Survived == 1]["Age"]
+ages_survived = train_df.loc[train_df.Survived == 1]["Age"]
 
-# ages_range = [i for i in range(100)]
+ages_range = [i for i in range(100)]
 
-# ages_survived_array = [age for age in ages_survived]
+ages_survived_array = [age for age in ages_survived]
     
-# plt.scatter(ages_survived_array, ages_survived_array)
-# plt.show()
+btyg.ScatterGraph(ages_survived_array, ages_survived_array)
 
 survived = train_df.loc[train_df.Survived == 1]
 not_survived = train_df.loc[train_df.Survived == 0]
