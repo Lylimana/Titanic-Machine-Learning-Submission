@@ -106,7 +106,8 @@ print("Percentage of women who survived: {:.2f}%".format(rate_women*100))
 train_df_cleaned = train_df.drop(['PassengerId', 'Survived', 'Name', 'SibSp', 'Ticket', 'Cabin',  'Embarked'], axis='columns')
 test_df_cleaned = test_df.drop(['PassengerId', 'Name', 'SibSp', 'Ticket', 'Cabin',  'Embarked'], axis='columns')
 
-train_df_cleaned['Sex'].replace(['female', 'male'],[1, 0], inplace=True)
+# Turning categorical data to numerical Data
+train_df_cleaned['Sex'].replace(['female', 'male'],[1, 0], inplace=True) # Could have just done Label Encoding... 
 
     # Embarked and Cabin can potentially lead us to more accurate prediction but dropping for now to reduce complexity and dimensionality.
 
@@ -135,13 +136,13 @@ X_train.describe().round(2)
 # Random Forest 
 from sklearn.ensemble import RandomForestClassifier
 
-rf = RandomForestClassifier()
+    # rf = RandomForestClassifier()
 
-rf.fit(X_train, y_train)
+    # rf.fit(X_train, y_train)
 
-y_pred = rf.predict(X_test)
+    # y_pred = rf.predict(X_test)
 
-rf.score(X_test, y_test)
+    # rf.score(X_test, y_test)
 
 # finding out more metrics on model i.e. accuracy
 from sklearn.metrics import classification_report
@@ -155,15 +156,55 @@ features.head()
 
 
 # Random Forest 2 - Tuning Hyper Parameters
-rf2 = RandomForestClassifier(
-    n_estimators = 100, # Number of Trees in the forest
-    max_features = None, # Sets limit on number of features used - in this case, there is no limit
-    max_depth = 50, # Sets the depth of tree
-    max_leaf_nodes = 50 # Sets the number of leaf nodes to branch out 
+    # rf2 = RandomForestClassifier(
+    #     n_estimators = 100, # Number of Trees in the forest
+    #     max_features = None, # Sets limit on number of features used - in this case, there is no limit
+    #     max_depth = 50, # Sets the depth of tree
+    #     max_leaf_nodes = 50, # Sets the number of leaf nodes to branch out 
+    #     min_samples_split = 2 # Sets the number of samples required to split internal node
+    # )
+
+    # rf2.fit(X_train, y_train)
+
+    # y_pred = rf2.predict(X_test)
+
+    # rf2.score(X_test, y_test)
+
+# Random Forest 3- Finding optimum hyperparameters using GridSearchCV
+from sklearn.model_selection import GridSearchCV
+
+    # param_grid = {
+    #     'n_estimators': [100, 500, 1000, 1500],
+    #     'max_depth': [None, 10, 50],
+    #     'min_samples_split': [2, 5],
+    #     'min_samples_leaf': [1, 2],
+    #     'bootstrap': [True, False] # Random rows of data are selected with replacement to form training datasets for each tree
+    # }
+
+    # grid_search = GridSearchCV(RandomForestClassifier(), param_grid=param_grid, cv=5 )
+    # grid_search.fit(X_train, y_train)
+
+    # print("Best Parameters: ", grid_search.best_params_)
+    # print("Best Parameters: ", grid_search.best_estimator_)
+    
+    
+    
+    # From Gridsearch, these where the best parameters discovered: 
+    # Best Parameters:  {'bootstrap': True, 'max_depth': 10, 'min_samples_leaf': 1, 'min_samples_split': 5, 'n_estimators': 500}
+    # Best Parameters:  RandomForestClassifier(max_depth=10, min_samples_split=5, n_estimators=500)
+    
+    
+
+rf3 = RandomForestClassifier(
+    bootstrap = True, 
+    max_depth = 10, 
+    min_samples_leaf = 1, 
+    min_samples_split = 5,
+    n_estimators = 500
 )
 
-rf2.fit(X_train, y_train)
+rf3.fit(X_train, y_train)
 
-y_pred = rf2.predict(X_test)
+y_pred = rf3.predict(X_test)
 
-rf2.score(X_test, y_test)
+rf3.score(X_test, y_test)
