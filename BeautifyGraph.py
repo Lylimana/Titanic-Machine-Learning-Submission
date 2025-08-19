@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-def ScatterGraph(array_X,array_Y)-> None: 
+def BeautifyGraph(array_X,array_Y)-> None: 
     plt.scatter(array_X,array_Y)
     plt.show()
     
