@@ -21,17 +21,6 @@ train_df.shape
 
 train_df.columns
 
-    # ages_survived = train_df.loc[train_df.Survived == 1]["Age"]
-
-    # ages_range = [i for i in range(100)]
-
-    # ages_survived_array = [age for age in ages_survived]
-        
-    # btyg.BeautifyGraph(ages_survived_array, ages_survived_array)
-
-
-
-
 survived = train_df.loc[train_df.Survived == 1]
 not_survived = train_df.loc[train_df.Survived == 0]
 
@@ -49,25 +38,24 @@ rate_women = sum(women)/len(women)
 men = train_df.loc[train_df.Sex == 'male']["Survived"]
 rate_men = sum(men)/len(men)
 
-
-# Class Comparisson Between those who Survived
 survived_class = survived['Pclass']
 not_survived_class = not_survived['Pclass']
-
+# Class Comparisson Between those who Survived
 Passenger_classes = np.arange(1,4)
 
-Passenger_classes_array_survived = [
-    survived.groupby('Pclass').size()[1],
-    survived.groupby('Pclass').size()[2],
-    survived.groupby('Pclass').size()[3]
-    ]
+Passenger_classes_array_survived = []
+
+for i in range(4): 
+    if i == 0: 
+        continue
+    Passenger_classes_array_survived.append(survived.groupby('Pclass').size()[i])
 
 fig, ax = plt.subplots()
 
-ax.bar(Passenger_classes,Passenger_classes_array_survived, width=1, edgecolor="white", linewidth=0.7)
+ax.bar(Passenger_classes,Passenger_classes_array_survived, width=1, edgecolor="white", linewidth=0.7, color = 'blue')
 
 ax.set(xlim=(0, 4), xticks=np.arange(1, 4),
-       ylim=(0, 200), yticks=np.linspace(0, 200, 21)
+       ylim=(0, 200), yticks=np.linspace(0, 400, 21)
        )
 plt.title('Class Comparisson Between those who Survived in different classes')
 plt.xlabel('Class')
@@ -82,10 +70,9 @@ for i in range(4):
         continue
     Passenger_classes_array_not_survived.append(not_survived.groupby('Pclass').size()[i])
     
-    
 fig, ax = plt.subplots()
 
-ax.bar(Passenger_classes,Passenger_classes_array_not_survived, width=1, edgecolor="white", linewidth=0.7)
+ax.bar(Passenger_classes,Passenger_classes_array_not_survived, width=1, edgecolor="white", linewidth=0.7, color = 'red')
 
 ax.set(xlim=(0, 4), xticks=np.arange(1, 4),
        ylim=(0, 200), yticks=np.linspace(0, 400, 21)
@@ -94,6 +81,23 @@ plt.title('Class Comparisson Between those who Died in different classes')
 plt.xlabel('Class')
 plt.ylabel('Total')
 plt.show()
+
+
+
+fig, ax = plt.subplots()
+
+
+ax.bar(Passenger_classes,Passenger_classes_array_not_survived, width=1, edgecolor="white", linewidth=0.7, color = 'red', alpha = 0.5)
+ax.bar(Passenger_classes,Passenger_classes_array_survived, width=1, edgecolor="white", linewidth=0.7, color = 'blue', alpha = 0.5)
+
+ax.set(xlim=(0, 4), xticks=np.arange(1, 4),
+       ylim=(0, 200), yticks=np.linspace(0, 400, 21)
+       )
+plt.title('Class Comparisson Between those who Died (R) and Survived (B) in different classes')
+plt.xlabel('Class')
+plt.ylabel('Total')
+plt.show()
+
 
 # Survival Rate of men and women
 print("Percentage of men who survived: {:.2f}%".format(rate_men*100))
