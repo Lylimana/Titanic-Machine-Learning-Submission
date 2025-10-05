@@ -143,7 +143,7 @@ X = train_df_cleaned
 
 y = train_df['Survived']
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, random_state = 11, test_size = 0.3)
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state = 11, test_size = 0.6)
 
 X_train.describe().round(2)
 
@@ -245,3 +245,7 @@ print(predictions)
 Final_predictions = test_df_cleaned.drop(['Pclass', 'Sex', 'Age', 'Parch', 'Fare'], axis='columns')
 
 Final_predictions['PassengerId'] = test_df['PassengerId']
+
+Final_predictions['Survived'] = predictions
+
+Final_predictions.to_excel('Final Predictions.csv', index = False)
